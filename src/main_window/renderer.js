@@ -48,6 +48,7 @@ var sequenceTimeout;
 var sequence_pos = 0;
 const find_container = document.getElementById("find_container");
 var find_box = null;
+var port_count = 0;
 
 // config UI of find interface
 let findInPage = new FindInPage(remote.getCurrentWebContents(), {
@@ -257,12 +258,16 @@ function changeTimestamp() {
 
 function getPorts() {
     SerialPort.list().then(function (ports) {
-        var returnList = "";
-        ports.forEach(function (port) {
-            returnList += "<option>" + port.path + "</option>";
-        });
-        com_ports.innerHTML = returnList;
-        com_ports.value = current_port;
+        if(ports.length !== port_count) {
+            var returnList = "";
+            ports.forEach(function (port) {
+                returnList += "<option>" + port.path + "</option>";
+            });
+            com_ports.innerHTML = returnList;
+            com_ports.value = current_port;
+            port_count = ports.length;
+        }
+
     });
 }
 
