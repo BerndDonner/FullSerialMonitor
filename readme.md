@@ -73,7 +73,7 @@ The Log file can be configured into 3 modes:
 - *Append*: All data received on the serial terminal will be appended to the log file, so the log persists between closing and opening the program.
 
 The "Add Timestamp" switch can be checked to add the timestamp to the log file.
-To select where the log file will be created, simply click on the "Browse..." button and select the folder.
+To select where the log file will be created, simply click on the "Browse..." button and select the folder. An important note is that the folder must have at least one file, it cannot be empty, when you're selecting it through the Browse button, that is due to a limitation of the file browser system. A workaround for using an empty folder is to simply write the path of the folder into the text input, make sure that it ends in a '\' or '/' character. In the future this quirk will be fixed.
 
 Once it is all configured, when you connect to the serial port a file called "log.txt" will be created on the folder you selected, and the data received will be treated according to the mode configured.
 

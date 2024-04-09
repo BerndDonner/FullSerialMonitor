@@ -73,7 +73,7 @@ O arquivo de log pode ser configurado de 3 modos diferentes:
 - *Concatenar*: Todos os dados recebidos no terminal serial será concatenado ao arquivo de log, então qualquer log guardado não será descartado mesmo ao fechar e abrir o programa.
 
 A chave "Ad. Timestamp" pode ser habilitada para adicionar o timestamp no arquivo de log.
-Para selecionar onde será criado o arquivo de log, simplesmente clique no botão "Buscar..." e selecione a pasta
+Para selecionar onde será criado o arquivo de log, simplesmente clique no botão "Buscar..." e selecione a pasta. Uma observação importante é que a pasta precisa ter no minimo 1 arquivo, não pode estar vazia, quando você estiver selecionando via o botão Buscar, isso se deve a uma limitação do sistema de busca de arquivos. Uma forma de contornar isso para poder usar uma pasta vazia é por digitar o caminho da pasta diretamente no input de texto, mas garanta que ele termina com '\' ou '/'. Esse comportamento será arrumado no futuro.
 
 Depois de configurado, quando você conectar na porta serial o arquivo "log.txt" será criado na pasta selecionada, e os dados recebidos serão tratados de acordo com o modo configurado.
 
