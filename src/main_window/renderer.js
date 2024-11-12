@@ -446,7 +446,7 @@ function recvData(payload) {
     runParsers();
 
     if (log_file_writer != null)
-        log_file_writer.write(message);
+        log_file_writer.write(payload);
     if (bin_file_writer != null)
         bin_file_writer.write(payload_raw);
      //terminal.innerHTML += message;
