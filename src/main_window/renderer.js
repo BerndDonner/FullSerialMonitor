@@ -313,7 +313,9 @@ function disconnect() {
                 recvData("\n<span style='color:red'>DISCONNECTED</span>\n");
             if (log_file_writer != null)
                 log_file_writer.close();
-        });
+            if (bin_file_writer != null)
+                bin_file_writer.close();
+         });
     }
 }
 
@@ -348,7 +350,10 @@ function connectSerialPort(data) {
             log_file_writer = fs.createWriteStream(log_folder_input.value + "log.txt", {
                 flags: log_type.value
             });
-        }
+            bin_file_writer = fs.createWriteStream(log_folder_input.value + "log.bin", {
+                flags: log_type.value
+            });
+         }
         else
             ipcRenderer.send("openAlert", current_language["log_folder_does_not_exist"]);
 
@@ -363,11 +368,14 @@ function connectSerialPort(data) {
                 recvData("\n<span style='color:red'>DISCONNECTED</span>\n");
             if (log_file_writer != null)
                 log_file_writer.close();
+            if (bin_file_writer != null)
+                bin_file_writer.close();
+
             return;
         }
     });
     serialport.on("readable", function () {
-        recvData(serialport.read().toString());
+        recvData(serialport.read());
     });
 
 }
@@ -375,8 +383,14 @@ function connectSerialPort(data) {
 
 
 //data receive handlers start
+//payload must be a binary array:
+//bytes in the range 128..255 are interpreted as unicode characters by the
+//toString function. Sometimes that may be okay. For raw binary data it is
+//simply wrong
 function recvData(payload) {
-    var message = payload;
+    
+    var payload_raw = payload;
+    var message = payload.toString();
     payload = "";
     let date = new Date();
     var tzoffset = date.getTimezoneOffset() * 60000; //offset in milliseconds
@@ -432,8 +446,10 @@ function recvData(payload) {
     runParsers();
 
     if (log_file_writer != null)
-        log_file_writer.write(payload);
-    //terminal.innerHTML += message;
+        log_file_writer.write(message);
+    if (bin_file_writer != null)
+        bin_file_writer.write(payload_raw);
+     //terminal.innerHTML += message;
     if (auto_scroll.checked == true)
         terminal.scrollTop = terminal.scrollHeight;
 }
