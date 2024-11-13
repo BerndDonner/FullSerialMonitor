@@ -389,23 +389,27 @@ function connectSerialPort(data) {
 //simply wrong
 function recvData(payload) {
     
+	function currentDatetime() {
+		let date = new Date();
+		let tzoffset = date.getTimezoneOffset() * 60000; //offset in milliseconds
+		let dateISO = (new Date(date - tzoffset)).toISOString().slice(0, -1);
+		return current_datetime = dateISO.match(/\d\d:\d\d:\d\d.\d\d\d/);
+	}
+
     var payload_raw = payload;
     var message = payload.toString();
-    payload = "";
-    let date = new Date();
-    var tzoffset = date.getTimezoneOffset() * 60000; //offset in milliseconds
-    var dateISO = (new Date(date - tzoffset)).toISOString().slice(0, -1);
-    var current_datetime = dateISO.match(/\d\d:\d\d:\d\d.\d\d\d/);
-
-    var m_length = message.length;
-    var index = 0;
-    while (index < m_length) {
+    payload = "";	
+    const m_length = message.length;
+	var current_datetime = currentDatetime(); //why must is be var not let???
+	
+    for (let index = 0; index < m_length;) {
         var message_new_line_content = "";
         var payload_new_line = "";
 
         //add the timestamp if a new line was started
         if (new_line == true) {
             new_line = false;
+			
             var timestamp = document.createElement("a");
             timestamp.innerHTML = current_datetime + "->";
             if (add_timestamp.checked == false)
@@ -420,22 +424,22 @@ function recvData(payload) {
             if (log_add_timestamp.checked)
                 payload_new_line = current_datetime + "->";
         }
+		
 
-        for (; index < m_length; index++) {
+        while (index < m_length) {
             var c = message[index];
+			index += 1;
             payload_new_line += c;
             if (c == '\n') {
                 new_line = true;
-                index++;
                 break;
             } else if (c != '\r') {
                 message_new_line_content += c;
             }
         }
-
         current_line.innerHTML += message_new_line_content;
-
         payload += payload_new_line;
+
 
         //adds the new line in html if a new line was detected
         if (new_line == true) {
