@@ -393,44 +393,47 @@ function recvData(payload) {
 		let date = new Date();
 		let tzoffset = date.getTimezoneOffset() * 60000; //offset in milliseconds
 		let dateISO = (new Date(date - tzoffset)).toISOString().slice(0, -1);
-		return current_datetime = dateISO.match(/\d\d:\d\d:\d\d.\d\d\d/);
+		return dateISO.match(/\d\d:\d\d:\d\d.\d\d\d/);
+	}
+	
+	function addTimestamp(datetime, line_index) {
+        let timestamp = document.createElement("a");
+        timestamp.innerHTML = datetime + "->";
+        if (add_timestamp.checked == false)
+            timestamp.setAttribute("style", "display:none");
+        timestamp.setAttribute("id", 't' + line_index);
+        return timestamp;
 	}
 
     var payload_raw = payload;
     var message = payload.toString();
     payload = "";	
     const m_length = message.length;
-	var current_datetime = currentDatetime(); //why must is be var not let???
+	let current_datetime = currentDatetime();
 	
     for (let index = 0; index < m_length;) {
         var message_new_line_content = "";
-        var payload_new_line = "";
 
         //add the timestamp if a new line was started
         if (new_line == true) {
             new_line = false;
 			
-            var timestamp = document.createElement("a");
-            timestamp.innerHTML = current_datetime + "->";
-            if (add_timestamp.checked == false)
-                timestamp.setAttribute("style", "display:none");
-            timestamp.setAttribute("id", 't' + current_line_index);
-            terminal.appendChild(timestamp);
+			terminal.appendChild(addTimestamp(current_datetime, current_line_index));
 
             current_line = document.createElement("a");
             current_line.setAttribute("id", 'l' + current_line_index);
             terminal.appendChild(current_line);
 
             if (log_add_timestamp.checked)
-                payload_new_line = current_datetime + "->";
+                payload += current_datetime + "->";  //WARNING: when there is binary data, this will corrupt the output
         }
 		
 
         while (index < m_length) {
-            var c = message[index];
+            let c = message[index];
 			index += 1;
-            payload_new_line += c;
-            if (c == '\n') {
+            payload += c;
+            if (c == '\n') {  
                 new_line = true;
                 break;
             } else if (c != '\r') {
@@ -438,7 +441,6 @@ function recvData(payload) {
             }
         }
         current_line.innerHTML += message_new_line_content;
-        payload += payload_new_line;
 
 
         //adds the new line in html if a new line was detected
