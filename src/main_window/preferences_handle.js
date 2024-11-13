@@ -24,6 +24,7 @@ var hupcl_enable = document.getElementById("hupcl");
 const preferences_file_path = "./preferences.json";
 
 let log_file_writer = null;
+let bin_file_writer = null;
 var preferences = null;
 var prev_preferences = null;
 
