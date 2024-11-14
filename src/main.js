@@ -8,6 +8,8 @@ const path = require('path');
 const url = require('url');
 require('@electron/remote/main').initialize();
 
+app.commandLine.appendSwitch('no-sandbox');
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 const windows = [null, null, null, null, null];
