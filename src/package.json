@@ -21,7 +21,7 @@
     "electron-packager": "^17.1.1"
   },
   "dependencies": {
-    "@electron/remote": "^2.0.8",
+    "@electron/remote": "^2.1.2",
     "chart.js": "^4.3.0",
     "dygraphs": "^2.2.1",
     "electron-find": "^1.0.7",

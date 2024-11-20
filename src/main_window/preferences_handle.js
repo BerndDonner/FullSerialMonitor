@@ -153,8 +153,11 @@ function setPreferences(target_preferences) {
 function readDirPaths(log, decoder) {
     if (log) {
         if (typeof (log_folder.files[0]) !== 'undefined') {
-            var log_folder_path = log_folder.files[0].path.trim();
-            log_folder_input.value = log_folder_path.substring(0, log_folder_path.lastIndexOf('\\') + 1);
+            var log_folder_path = log_folder.files[0].webkitRelativePath.trim();
+            const lastForwardSlash = log_folder_path.lastIndexOf('/');
+            const lastBackslash    = log_folder_path.lastIndexOf('\\');
+
+            log_folder_input.value = log_folder_path.substring(0, Math.max(lastForwardSlash, lastBackslash) + 1);
         }
         else
             ipcRenderer.send("openAlert", current_language["folder_empty_error"]);
